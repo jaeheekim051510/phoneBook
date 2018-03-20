@@ -7,6 +7,18 @@ const rl = readline.createInterface({
 
 var aData = [];
 
+var data = function() {
+    fs.readFile('contact.txt', 'utf8', function(err, fileContents){
+        if (err) {
+            console.log('error')
+        }
+        else if (fileContents) {
+            aData = JSON.parse(fileContents);
+        }
+    });
+}
+data();
+
 
 var newData = function(firstName, lastName, phoneNumber) {
     var newEntry = {};
@@ -26,10 +38,18 @@ var question = function() {
             setEntry();
         }
         else if (answer === "3") {
-            console.log('3');
+            rl.question("First Name: ", function(firstName) {
+                var firstName = firstName.toUpperCase();
+                rl.question("Last Name: ", function(lastName) {
+                    var lastName = lastName.toUpperCase();
+                })
+            })
         }
         else if (answer === "4") {
-            listData();
+            for (var i=0; i<=aData.length-1; i++) {
+                console.log(`First name: ${aData[i].firstName}, Last name: ${aData[i].lastName}, Phone Number: ${aData[i].phoneNumber}`)
+            };
+            question();
         }
         else if (answer === "5") {
             console.log('Thank you!');
