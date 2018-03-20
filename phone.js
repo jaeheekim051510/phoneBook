@@ -1,24 +1,18 @@
 const readline = require('readline');
-var fs = require('fs');
+const fs = require('fs');
 const rl = readline.createInterface({
     input: process.stdin,
-    output: process.stdout
-});
+    output: process.stdout });
+const promisify = require('util').promisify;
+const readFileAsPromise = promisify(fs.readFile);
+const writeFile = promisify(fs.writeFile);
 
 var aData = [];
 
-var data = function() {
-    fs.readFile('contact.txt', 'utf8', function(err, fileContents){
-        if (err) {
-            console.log('error')
-        }
-        else if (fileContents) {
-            aData = JSON.parse(fileContents);
-        }
+readFileAsPromise('contact.txt')
+    .then(function(fileContents) {
+        aData = JSON.parse(fileContents);
     });
-}
-data();
-
 
 var newData = function(firstName, lastName, phoneNumber) {
     var newEntry = {};
@@ -30,7 +24,17 @@ var newData = function(firstName, lastName, phoneNumber) {
 
 
 var question = function() {
-    rl.question("=====================\n1.Look up and entry\n2.Set an entry\n3.Delete an entry\n4.List all entries\n5.Quit\n=====================\nWhat do you want to to (1-5)? ", function (answer) {
+    rl.question(`
+=====================
+1.Look up and entry
+2.Set an entry
+3.Delete an entry
+4.List all entries
+5.Quit
+=====================
+
+What do you want to to (1-5)? `, 
+    function (answer) {
         if (answer === "1") {
             lookUpEntry();
         }
@@ -99,18 +103,6 @@ var saveData = function() {
         if (err) {
         console.log('err');
         };
-    });
-};
-
-var listData = function() {
-    fs.readFile('contact.txt', 'utf8', function(err, fileContents){
-        if (err) {
-            console.log('error')
-        }
-        else {
-            console.log(fileContents);
-            question();
-            }
     });
 };
 
