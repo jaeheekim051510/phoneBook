@@ -22,7 +22,6 @@ var newData = function(firstName, lastName, phoneNumber) {
     aData.push(newEntry);
 }
 
-
 var question = function() {
     rl.question(`
 =====================
